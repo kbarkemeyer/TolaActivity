@@ -3001,11 +3001,3 @@ msgstr "Article de la liste"
 msgid "Username"
 msgstr "Nom d`utilisateur"
 
-#~ msgid "Sum"
-#~ msgstr "Somme"
-
-#~ msgid "of targets"
-#~ msgstr "des cibles"
-
-#~ msgid "ACTUALS"
-#~ msgstr "RAPPORTS RÉEL"
