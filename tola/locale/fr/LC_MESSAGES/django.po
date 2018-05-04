@@ -1201,6 +1201,28 @@ msgstr "Tapez le nom de la Table dans la boîte ci-dessus pour rechercher."
 #: templates/indicators/collecteddata_list.html:160
 msgid "Collected Indicator Data Report"
 msgstr "Rapport de données d`indicateur collectées"
+<<<<<<< HEAD
+=======
+
+#: templates/indicators/collecteddata_list.html:118
+#: templates/indicators/collecteddata_list.html:119
+#: templates/indicators/collecteddata_list.html:120
+#: templates/indicators/data_report.html:92
+#: templates/indicators/data_report.html:93
+#: templates/indicators/data_report.html:94
+msgid "visible"
+msgstr "visible"
+
+#: templates/indicators/collecteddata_list.html:118
+#: templates/indicators/collecteddata_list.html:119
+#: templates/indicators/collecteddata_list.html:120
+#: templates/indicators/data_report.html:92
+#: templates/indicators/data_report.html:93
+#: templates/indicators/data_report.html:94
+#: templates/indicators/indicatortargets.html:8
+msgid "targets"
+msgstr "cibles"
+>>>>>>> translations modified
 
 #: templates/indicators/collecteddata_list.html:123
 #: templates/indicators/data_report.html:97 templates/indicators/report.html:95
@@ -1730,9 +1752,19 @@ msgstr "Qui"
 msgid "No"
 msgstr "Non"
 
+<<<<<<< HEAD
 #: templates/indicators/indicatortargets.html:8
 msgid "targets"
 msgstr "cibles"
+=======
+#: templates/indicators/indicatortargets.html:62
+msgid "Sum"
+msgstr "Somme"
+
+#: templates/indicators/indicatortargets.html:62
+msgid "of targets"
+msgstr "des cibles"
+>>>>>>> translations modified
 
 #: templates/indicators/indicatortargets.html:88
 msgid "Life of Program (LoP) target"
