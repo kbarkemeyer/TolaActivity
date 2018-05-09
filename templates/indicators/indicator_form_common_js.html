@@ -2,15 +2,14 @@
 
 <script>
     var validation_msgs = {};
-    var mediaSize = window.matchMedia("(max-width: 575px)")
-    var userLang = "{{ LANGUAGE_CODE }}";
-
+    var mediaSize = window.matchMedia("(max-width: 575px)") 
+    
     function setupPopupCalendar() {
         $('.monthPicker').datepicker({
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            // dateFormat: 'M d, yy',
+            dateFormat: "M d, yy",
             beforeShow(input, inst){
                 // move date picker popup div inside modal dialog(fix for firefox)
                 $(input).parent().append($('#ui-datepicker-div'));
@@ -44,7 +43,7 @@
                 field.trigger('change');
             });
         });
-    }
+    } 
 
     $( document ).ready(function() {
         show_hide_frequency_fields();
@@ -165,15 +164,15 @@
                     <td class="align-middle pr-0">
                         ${(target_frequency != 8) ? `
                             <strong>${pt.period }</strong></div>
-                            <div>${formatDate(pt.start_date)} ${ pt.start_date ? '-' : ''} ${formatDate(pt.end_date)}</div>`
+                            <div>${formatDate(pt.start_date, userLang)} ${ pt.start_date ? '-' : ''} ${formatDate(pt.end_date, userLang)}</div>`
                             :
-                            `<input type="text" name="${pt.period}" placeholder="Enter event name" value="${(rowNum == 0) ? pt.period : (pt.id ? pt.period : '') }" class="form-control input-text">
+                            `<input type="text" name="${pt.period}" placeholder="{% trans 'Enter event name' %}" value="${(rowNum == 0) ? pt.period : (pt.id ? pt.period : '') }" class="form-control input-text">
                                 <span style="margin:0px;" class="help-block"> </span>`
                         }
                     </td>
 
                     <td class="align-middle" align="right" width="150px">
-                        <input type="number" id="pt-${pt.id}" value="${parseFloat(pt.target).toFixed(2).replace(/[.,]00$/, "")}" data-start-date="${formatDate(pt.start_date)}" data-end-date="${formatDate(pt.end_date)}" name="${pt.period}" placeholder="{% trans 'Enter target' %}" class="form-control input-value">
+                        <input type="number" id="pt-${pt.id}" value="${parseFloat(pt.target).toFixed(2).replace(/[.,]00$/, "")}" data-start-date="${formatDate(pt.start_date, userLang)}" data-end-date="${formatDate(pt.end_date, userLang)}" name="${pt.period}" placeholder="{% trans 'Enter target' %}" class="form-control input-value">
                             <span id="hint_id_pt_${pt.period}" style="margin:0px;" class="help-block"> </span>
                     </td>
                 </tr>
@@ -244,10 +243,12 @@
                 return;
             }
         }
+
         // $("#id_create_targets_btn").attr("disabled", true);
         var submitBtnName = $(form).find("input[type=submit]:focus" );
         var form_url = $(form).attr('action');
         var form_data = $(form).serialize();
+
         // mark that the form data has changed so that when the modal is closed the list view can be updated
         $(form).data('indicatorchanged', true);
 
@@ -553,7 +554,7 @@
     function validatePeriodStartField() {
         const fieldId = "id_target_frequency_start";
         const field = $("#" + fieldId);
-
+       
         let errMsg = undefined;
 
         if ($.isEmptyObject(field.val())) {
@@ -569,8 +570,8 @@
             $("#validation_" + fieldId).text(errMsg);
             return false;
         } else {
-            var val = formatDate(field.val(), 1);
-            field.val(val);
+            // var val = formatDate(field.val(), userLang, 1);
+            // field.val(val);
             errMsg = undefined;
             field.removeClass('is-invalid');
             $("#div_id_target_frequency_start").addClass('mb-3')

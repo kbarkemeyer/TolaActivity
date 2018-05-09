@@ -34,6 +34,7 @@ function isDate(dateVal) {
     if (day < 1 || day > 31) return false;
     return new Date(dateVal) === 'Invalid Date' ? false : true;
     */
+
     var date = new Date(dateVal);
     if (date == 'Invalid Date') {
         return false;
@@ -88,7 +89,7 @@ function isDate(dateVal) {
 //     }
 // }
 
-function formatDate(dateString, day=0, lang="en") {
+function formatDate(dateString, lang, day=0) {
 
     if (dateString == null || dateString == undefined || dateString.length == 0 || dateString == 'undefined' || dateString == 'null' ) {
         return '';
@@ -107,6 +108,9 @@ function formatDate(dateString, day=0, lang="en") {
         }
         var options = {year: 'numeric', month: 'short', day: 'numeric'};
         var ret = dateval.toLocaleDateString(lang, options);
+        if (lang != "en") {
+            
+        }
         return ret;
     } catch (err) {
         console.log(err);

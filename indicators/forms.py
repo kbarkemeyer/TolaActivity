@@ -93,6 +93,10 @@ class IndicatorForm(forms.ModelForm):
         if self.instance.target_frequency and self.instance.target_frequency != Indicator.LOP:
             self.fields['target_frequency'].widget.attrs['readonly'] = True
 
+    # potential custom clean function
+    # def clean(self, *args, **kwargs):
+    #     data = self.fields['target_frequency_start']
+
 
 class CollectedDataForm(forms.ModelForm):
 
