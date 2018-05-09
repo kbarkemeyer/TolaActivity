@@ -1,8 +1,10 @@
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <script>
     var validation_msgs = {};
     var mediaSize = window.matchMedia("(max-width: 575px)") 
+    var userLang = "{{ LANGUAGE_CODE }}";
     
     function setupPopupCalendar() {
         $('.monthPicker').datepicker({
@@ -247,7 +249,33 @@
         // $("#id_create_targets_btn").attr("disabled", true);
         var submitBtnName = $(form).find("input[type=submit]:focus" );
         var form_url = $(form).attr('action');
-        var form_data = $(form).serialize();
+        var form_data, index;
+        form_data = $(form).serializeArray();
+
+        const month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        var new_date = new Date(year, month, 1)
+        
+        var submit_date = new_date.getFullYear()+'-' + (new_date.getMonth()+1) + '-'+new_date.getDate();
+
+
+        for (index = 0; index < form_data.length; ++index) {
+            if (form_data[index].name == "target_frequency_start") {
+                form_data[index].value = submit_date;
+                break
+            }
+        }
+
+        if (index >= form_data.length) {
+            form_data.push({
+                name: "target_frequency_start",
+                value: submit_date
+            });
+        }
+
+        form_data = $.param(form_data);
+
+        // var form_data = $(form).serialize();
 
         // mark that the form data has changed so that when the modal is closed the list view can be updated
         $(form).data('indicatorchanged', true);
@@ -289,8 +317,9 @@
         if ($.isEmptyObject(periodic_targets)) {
             form_data += "&periodic_targets=generateTargets";
         } else {
-            form_data += "&periodic_targets=" + JSON.stringify(periodic_targets);
+            form_data += "&periodic_targets" + JSON.stringify(periodic_targets);
         }
+        console.log(form_data);
 
         $("#modalmessages").html("<img src='{{ STATIC_URL }}/img/ajax-loader.gif'>  <span>{% trans 'Saving form... please wait.' %}</span>");
         $.ajax({
@@ -559,9 +588,10 @@
 
         if ($.isEmptyObject(field.val())) {
             errMsg = "{% trans 'Please complete this field.' %}";
-        } else if (!isDate(field.val())) {
-            errMsg = "{% trans 'Please enter a valid date.' %}";
-        }
+        } 
+        // else if (!isDate(field.val())) {
+        //     errMsg = "{% trans 'Please enter a valid date.' %}";
+        // }
 
         if (errMsg) {
             field.addClass('is-invalid');
