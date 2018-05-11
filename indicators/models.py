@@ -696,6 +696,7 @@ class PeriodicTarget(models.Model):
     def start_date_formatted(self):
         if self.start_date:
             return self.start_date.strftime('%b %d, %Y').replace(" 0", " ")
+            print self.start_date
         return self.start_date
 
     @property

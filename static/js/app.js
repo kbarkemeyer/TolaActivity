@@ -34,7 +34,6 @@ function isDate(dateVal) {
     if (day < 1 || day > 31) return false;
     return new Date(dateVal) === 'Invalid Date' ? false : true;
     */
-
     var date = new Date(dateVal);
     if (date == 'Invalid Date') {
         return false;

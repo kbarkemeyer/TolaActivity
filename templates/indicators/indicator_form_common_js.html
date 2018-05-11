@@ -3,7 +3,7 @@
 
 <script>
     var validation_msgs = {};
-    var mediaSize = window.matchMedia("(max-width: 575px)") 
+    var mediaSize = window.matchMedia("(max-width: 575px)"); 
     var userLang = "{{ LANGUAGE_CODE }}";
     
     function setupPopupCalendar() {
@@ -11,7 +11,7 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: "M d, yy",
+            // dateFormat: 'M d, yy' ,
             beforeShow(input, inst){
                 // move date picker popup div inside modal dialog(fix for firefox)
                 $(input).parent().append($('#ui-datepicker-div'));
@@ -249,8 +249,6 @@
         // $("#id_create_targets_btn").attr("disabled", true);
         var submitBtnName = $(form).find("input[type=submit]:focus" );
         var form_url = $(form).attr('action');
-        var form_data, index;
-        form_data = $(form).serializeArray();
 
         const month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
         const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -258,27 +256,32 @@
         
         var submit_date = new_date.getFullYear()+'-' + (new_date.getMonth()+1) + '-'+new_date.getDate();
 
+        if (!month) {
+            var form_data = $(form).serialize();
+        } else {
+            var form_data, index;
+            form_data = $(form).serializeArray();
 
-        for (index = 0; index < form_data.length; ++index) {
-            if (form_data[index].name == "target_frequency_start") {
-                form_data[index].value = submit_date;
-                break
+            for (index = 0; index < form_data.length; ++index) {
+                if (form_data[index].name == "target_frequency_start") {
+                    form_data[index].value = submit_date;
+                    break
+                }
             }
+
+            if (index >= form_data.length) {
+                form_data.push({
+                    name: "target_frequency_start",
+                    value: submit_date
+                });
+            }
+
+            form_data = $.param(form_data);
         }
-
-        if (index >= form_data.length) {
-            form_data.push({
-                name: "target_frequency_start",
-                value: submit_date
-            });
-        }
-
-        form_data = $.param(form_data);
-
-        // var form_data = $(form).serialize();
 
         // mark that the form data has changed so that when the modal is closed the list view can be updated
         $(form).data('indicatorchanged', true);
+
 
         var periodic_targets = [];
 
@@ -317,9 +320,8 @@
         if ($.isEmptyObject(periodic_targets)) {
             form_data += "&periodic_targets=generateTargets";
         } else {
-            form_data += "&periodic_targets" + JSON.stringify(periodic_targets);
+            form_data += "&periodic_targets=" + JSON.stringify(periodic_targets);
         }
-        console.log(form_data);
 
         $("#modalmessages").html("<img src='{{ STATIC_URL }}/img/ajax-loader.gif'>  <span>{% trans 'Saving form... please wait.' %}</span>");
         $.ajax({
@@ -342,7 +344,6 @@
             $(alertsElement).html('');
 
             createAlert("success", "{% trans 'Success, form data saved.' %}", true, alertsElement);
-
             var jsondata = $.parseJSON(data);
             var indicator = $.parseJSON(jsondata["indicatorjson"])[0];
             var targets_sum = jsondata["targets_sum"];
@@ -600,8 +601,8 @@
             $("#validation_" + fieldId).text(errMsg);
             return false;
         } else {
-            // var val = formatDate(field.val(), userLang, 1);
-            // field.val(val);
+            var val = formatDate(field.val(), userLang, 1);
+            field.val(val);
             errMsg = undefined;
             field.removeClass('is-invalid');
             $("#div_id_target_frequency_start").addClass('mb-3')

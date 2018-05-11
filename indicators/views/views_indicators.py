@@ -1,4 +1,5 @@
 import json
+import locale
 import re
 from datetime import datetime
 from urlparse import urlparse
@@ -18,6 +19,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
@@ -43,6 +45,7 @@ from ..models import (
     ExternalService, TolaTable
 )
 
+langDict = {'en': 'en_US.UTF-8', 'fr': 'fr_FR'}
 
 def generate_periodic_target_single(tf, start_date, nthTargetPeriod,
                                     target_frequency_custom=''):
@@ -501,6 +504,10 @@ class IndicatorUpdate(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_valid(self, form, **kwargs):
+        userLang = translation.get_language_from_request(self.request)
+        print userLang
+        lang = langDict[userLang]
+        print lang
         periodic_targets = self.request.POST.get('periodic_targets', None)
         indicatr = Indicator.objects.get(pk=self.kwargs.get('pk'))
         generatedTargets = []
@@ -529,27 +536,61 @@ class IndicatorUpdate(UpdateView):
         if periodic_targets and periodic_targets != 'generateTargets':
             # now create/update periodic targets
             pt_json = json.loads(periodic_targets)
+            print pt_json
             generated_pt_ids = []
             for i, pt in enumerate(pt_json):
                 pk = int(pt.get('id'))
                 if pk == 0:
                     pk = None
+                if userLang == 'en':
+                    try:
+                        start_date = dateutil.parser.parse(
+                            pt.get('start_date', None))
+                        print start_date
 
-                try:
-                    start_date = dateutil.parser.parse(
-                        pt.get('start_date', None))
+                        start_date = datetime.strftime(start_date, '%Y-%m-%d')
+                        print start_date
+                    except ValueError:
+                        # raise ValueError("Incorrect data value")
+                        start_date = None
 
-                    start_date = datetime.strftime(start_date, '%Y-%m-%d')
-                except ValueError:
-                    # raise ValueError("Incorrect data value")
-                    start_date = None
+                    try:
+                        end_date = dateutil.parser.parse(pt.get('end_date', None))
+                        end_date = datetime.strftime(end_date, '%Y-%m-%d')
+                    except ValueError:
+                        # raise ValueError("Incorrect data value")
+                        end_date = None
+                else:
+                    locale.setlocale(locale.LC_ALL, lang)
+                    try:
+                        start_date = datetime.strptime(
+                            (pt.get('start_date', None)), '%d %B %Y').strftime(
+                            '%Y-%m-%d')
+                        print "start", start_date
+                    except ValueError:
+                        try:
+                            start_date = datetime.strptime(
+                            (pt.get('start_date', None)), '%d %b. %Y').strftime(
+                                '%Y-%m-%d')
+                            print "start", start_date
+                        except ValueError:
+                            start_date = None
 
-                try:
-                    end_date = dateutil.parser.parse(pt.get('end_date', None))
-                    end_date = datetime.strftime(end_date, '%Y-%m-%d')
-                except ValueError:
-                    # raise ValueError("Incorrect data value")
-                    end_date = None
+                    try:
+                        end_date = datetime.strptime(
+                            (pt.get('end_date', None)), '%d %B %Y').strftime(
+                            '%Y-%m-%d')
+                        print "end", end_date
+                    except ValueError:
+                        try:
+                            end_date = datetime.strptime(
+                            (pt.get('end_date', None)), '%d %b. %Y').strftime(
+                                '%Y-%m-%d')
+                            print "end", end_date
+                        except ValueError:
+                            end_date = None
+
+                    locale.setlocale(locale.LC_ALL, 'en_US')
 
                 defaults = {
                     'period': pt.get('period', ''),
