@@ -21,10 +21,14 @@ SITE_NAME = basename(DJANGO_ROOT)
 # name in our dotted import paths:
 path.append(DJANGO_ROOT)
 
-# Add LOCALE_PATH , a list of directories where Django looks for translation
-# files
+# Add LOCALE_PATH, a list of directories where Django looks for translation
+# files and FORMAT_MODULE_PATH, where format file will exist
 LOCALE_PATHS = [
     join(DJANGO_ROOT, 'locale'),
+]
+
+FORMAT_MODULE_PATH = [
+    'formats'
 ]
 
 ########## END PATH CONFIGURATION

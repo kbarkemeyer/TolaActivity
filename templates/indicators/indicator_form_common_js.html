@@ -153,7 +153,6 @@
         submitForm($("#indicator_update_form"));
     });
 
-
     function createPeriodicTargetRow(pt, target_frequency, isLastIteration, rowNum) {
         var markup = `
                 <tr class="periodic-target">
@@ -590,9 +589,9 @@
         if ($.isEmptyObject(field.val())) {
             errMsg = "{% trans 'Please complete this field.' %}";
         } 
-        // else if (!isDate(field.val())) {
-        //     errMsg = "{% trans 'Please enter a valid date.' %}";
-        // }
+        else if (!isDate(field.val())) {
+            errMsg = "{% trans 'Please enter a valid date.' %}";
+        }
 
         if (errMsg) {
             field.addClass('is-invalid');
