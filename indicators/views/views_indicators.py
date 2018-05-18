@@ -5,7 +5,6 @@ from datetime import datetime
 from urlparse import urlparse
 
 import dateparser
-import dateutil.parser
 import requests
 from dateutil.relativedelta import relativedelta
 from django.contrib import messages
@@ -499,15 +498,14 @@ class IndicatorUpdate(UpdateView):
         return kwargs
 
     def form_invalid(self, form):
-        messages.error(self.request, _('Invalid Form'), fail_silently=False)
-        print("...............%s.........................." % form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        if self.request.is_ajax():
+            return HttpResponse(status=400)
+        else:
+            messages.error(self.request, _('Invalid Form'), fail_silently=False)
+            print("...............%s.........................." % form.errors)
+            return self.render_to_response(self.get_context_data(form=form))
 
     def form_valid(self, form, **kwargs):
-        # userLang = translation.get_language_from_request(self.request)
-        # print userLang
-        # lang = langDict[userLang]
-        # print lang
         periodic_targets = self.request.POST.get('periodic_targets', None)
         indicatr = Indicator.objects.get(pk=self.kwargs.get('pk'))
         generatedTargets = []
@@ -536,7 +534,6 @@ class IndicatorUpdate(UpdateView):
         if periodic_targets and periodic_targets != 'generateTargets':
             # now create/update periodic targets
             pt_json = json.loads(periodic_targets)
-            print pt_json
             generated_pt_ids = []
             for i, pt in enumerate(pt_json):
                 pk = int(pt.get('id'))

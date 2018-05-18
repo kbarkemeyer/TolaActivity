@@ -1,6 +1,7 @@
 import dateparser
 from datetime import datetime
 from functools import partial
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django import forms
 from django.forms.fields import DateField
@@ -27,22 +28,17 @@ class DatePicker(forms.DateInput):
 
 
 class LocaleDateField(DateField):
-    input_formats = [('%b %d, %Y'), ('%d %b %Y')]
-    default_error_messages = {
-        'invalid': _('Enter a valid date.'),
-    }
-
     def to_python(self, value):
-        localeDate = dateparser.parse(value)
         if value in self.empty_values:
             return None
-        if isinstance(localeDate, datetime):
-            return localeDate.date()
-        return super().to_python(localeDate)
+        try:
+            return dateparser.parse(value).date()
+        except (AttributeError):
+            raise ValidationError(
+                self.error_messages['invalid'], code='invalid')
 
 
 class IndicatorForm(forms.ModelForm):
-    print "IndicatorForm"
     program2 = forms.CharField(
         widget=forms.TextInput(
             attrs={'readonly': True, 'label': 'Program'}
@@ -70,7 +66,6 @@ class IndicatorForm(forms.ModelForm):
     program = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
-        print "Meta"
         model = Indicator
         exclude = ['program', 'create_date', 'edit_date']
         widgets = {
@@ -84,10 +79,8 @@ class IndicatorForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={'rows': 4}),
             'rationale_for_target': forms.Textarea(attrs={'rows': 4}),
         }
-        print "Finished Meta"
 
     def __init__(self, *args, **kwargs):
-        print "init"
         indicator = kwargs.get('instance', None)
         if not indicator.unit_of_measure_type:
             kwargs['initial']['unit_of_measure_type'] = \

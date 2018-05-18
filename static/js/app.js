@@ -107,9 +107,6 @@ function formatDate(dateString, lang, day=0) {
         }
         var options = {year: 'numeric', month: 'short', day: 'numeric'};
         var ret = dateval.toLocaleDateString(lang, options);
-        if (lang != "en") {
-            
-        }
         return ret;
     } catch (err) {
         console.log(err);
