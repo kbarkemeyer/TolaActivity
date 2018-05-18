@@ -1,7 +1,9 @@
+import dateparser
 from datetime import datetime
 from functools import partial
 from django.db.models import Q
 from django import forms
+from django.forms.fields import DateField
 from django.utils.translation import ugettext_lazy as _
 from workflow.models import (
     Program, SiteProfile, Documentation, ProjectComplete, TolaUser, Sector
@@ -24,7 +26,23 @@ class DatePicker(forms.DateInput):
     DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 
+class LocaleDateField(DateField):
+    input_formats = [('%b %d, %Y'), ('%d %b %Y')]
+    default_error_messages = {
+        'invalid': _('Enter a valid date.'),
+    }
+
+    def to_python(self, value):
+        localeDate = dateparser.parse(value)
+        if value in self.empty_values:
+            return None
+        if isinstance(localeDate, datetime):
+            return localeDate.date()
+        return super().to_python(localeDate)
+
+
 class IndicatorForm(forms.ModelForm):
+    print "IndicatorForm"
     program2 = forms.CharField(
         widget=forms.TextInput(
             attrs={'readonly': True, 'label': 'Program'}
@@ -34,6 +52,12 @@ class IndicatorForm(forms.ModelForm):
         choices=Indicator.UNIT_OF_MEASURE_TYPES,
         widget=forms.RadioSelect(),
     )
+
+    target_frequency_start = LocaleDateField(
+        widget=forms.DateInput(
+            attrs={'class': 'monthPicker'})
+    )
+
     # cumulative_choices = (
     #     (1, None),
     #     (2, True),
@@ -46,6 +70,7 @@ class IndicatorForm(forms.ModelForm):
     program = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
+        print "Meta"
         model = Indicator
         exclude = ['program', 'create_date', 'edit_date']
         widgets = {
@@ -59,8 +84,10 @@ class IndicatorForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={'rows': 4}),
             'rationale_for_target': forms.Textarea(attrs={'rows': 4}),
         }
+        print "Finished Meta"
 
     def __init__(self, *args, **kwargs):
+        print "init"
         indicator = kwargs.get('instance', None)
         if not indicator.unit_of_measure_type:
             kwargs['initial']['unit_of_measure_type'] = \
@@ -88,15 +115,13 @@ class IndicatorForm(forms.ModelForm):
         self.fields['name'].required = True
         self.fields['unit_of_measure'].required = True
         self.fields['target_frequency'].required = True
-        self.fields['target_frequency_start'].widget.attrs['class'] = 'monthPicker'
+        # self.fields['target_frequency_start'].widget.attrs['class'] = 'monthPicker'
         # self.fields['is_cumulative'].widget = forms.RadioSelect()
         if self.instance.target_frequency and self.instance.target_frequency != Indicator.LOP:
             self.fields['target_frequency'].widget.attrs['readonly'] = True
-
     # potential custom clean function
     # def clean(self, *args, **kwargs):
     #     data = self.fields['target_frequency_start']
-
 
 class CollectedDataForm(forms.ModelForm):
 

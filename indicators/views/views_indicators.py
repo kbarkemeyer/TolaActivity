@@ -546,10 +546,7 @@ class IndicatorUpdate(UpdateView):
                 try:
                     start_date = dateparser.parse(
                         pt.get('start_date', None))
-                    print start_date
-
                     start_date = datetime.strftime(start_date, '%Y-%m-%d')
-                    print start_date
                 except ValueError:
                     # raise ValueError("Incorrect data value")
                     start_date = None
