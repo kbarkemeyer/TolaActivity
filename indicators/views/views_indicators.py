@@ -44,7 +44,6 @@ from ..models import (
     ExternalService, TolaTable
 )
 
-# langDict = {'en': 'en_US.UTF-8', 'fr': 'fr_FR'}
 
 def generate_periodic_target_single(tf, start_date, nthTargetPeriod,
                                     target_frequency_custom=''):
@@ -70,7 +69,7 @@ def generate_periodic_target_single(tf, start_date, nthTargetPeriod,
         end = ((start_date + relativedelta(years=+j)) +
                relativedelta(days=-1)).strftime('%Y-%m-%d')
 
-        target_period = {'period': 'Year %s' % j, 'start_date': start,
+        target_period = {'period': _('Year %s') % j, 'start_date': start,
                          'end_date': end}
     elif tf == Indicator.SEMI_ANNUAL:
         start = ((start_date + relativedelta(months=+(i * 6)))
@@ -79,7 +78,7 @@ def generate_periodic_target_single(tf, start_date, nthTargetPeriod,
         end = ((start_date + relativedelta(months=+(j * 6))) +
                relativedelta(days=-1)).strftime('%Y-%m-%d')
 
-        target_period = {'period': 'Semi-annual period %s' % j,
+        target_period = {'period': _('Semi-annual period %s') % j,
                          'start_date': start, 'end_date': end}
 
     elif tf == Indicator.TRI_ANNUAL:
@@ -89,7 +88,7 @@ def generate_periodic_target_single(tf, start_date, nthTargetPeriod,
         end = ((start_date + relativedelta(months=+(j * 4))) +
                relativedelta(days=-1)).strftime('%Y-%m-%d')
 
-        target_period = {'period': 'Tri-annual period %s' % j,
+        target_period = {'period': _('Tri-annual period %s') % j,
                          'start_date': start, 'end_date': end}
 
     elif tf == Indicator.QUARTERLY:
@@ -99,7 +98,7 @@ def generate_periodic_target_single(tf, start_date, nthTargetPeriod,
         end = ((start_date + relativedelta(months=+(j * 3))) +
                relativedelta(days=-1)).strftime('%Y-%m-%d')
 
-        target_period = {'period': 'Quarter %s' % j, 'start_date': start,
+        target_period = {'period': _('Quarter %s') % j, 'start_date': start,
                          'end_date': end}
     elif tf == Indicator.MONTHLY:
         month = (start_date + relativedelta(months=+i)).strftime("%B")
