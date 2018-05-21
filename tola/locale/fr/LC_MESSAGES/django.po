@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-21 09:04-0700\n"
+"POT-Creation-Date: 2018-05-21 12:29-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -607,18 +607,23 @@ msgid "N/A"
 msgstr "N/A"
 
 #: indicators/views/views_indicators.py:69
+#, python-format
 msgid "Year %s"
 msgstr "An %s"
 
 #: indicators/views/views_indicators.py:78
+#, python-format
 msgid "Semi-annual period %s"
 msgstr "Période semi-annuelle %s"
 
 #: indicators/views/views_indicators.py:88
+#, fuzzy, python-format
+#| msgid "Tri-annual period %s"
 msgid "Tri-annual period %s"
 msgstr "Période tri-annuelle $s"
 
 #: indicators/views/views_indicators.py:98
+#, python-format
 msgid "Quarter %s"
 msgstr "Trimestre %s"
 
