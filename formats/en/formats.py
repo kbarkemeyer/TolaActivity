@@ -1,0 +1,3 @@
+
+DATE_FORMAT = 'Y-n-d'
+SHORT_DATE_FORMAT = 'N j, Y'

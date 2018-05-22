@@ -200,11 +200,11 @@
       },
     });
 
-    $("#id_level").select2({"placeholder": "All levels"});
-    $("#id_ind_type").select2({"placeholder": "All types"});
-    $("#id_sector").select2({"placeholder": "All sectors"});
-    $("#id_site").select2({"placeholder": "All sites"});
-    $("#id_indicators").select2({"placeholder": "All indicators"});
+    $("#id_level").select2({"placeholder": "{% trans 'All levels' %}"});
+    $("#id_ind_type").select2({"placeholder": "{% trans 'All types' %}"});
+    $("#id_sector").select2({"placeholder": "{% trans 'All sectors' %}"});
+    $("#id_site").select2({"placeholder": "{% trans 'All sites' %}"});
+    $("#id_indicators").select2({"placeholder": "{% trans 'All indicators' %}"});
 
     $("#id_form_indicator_filter").on("input", "#id_program", function (e) {
       const program_id = $(this).val();

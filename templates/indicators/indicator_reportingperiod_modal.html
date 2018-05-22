@@ -6,8 +6,8 @@
             <div class="modal-body ml-4 mb-3" id="reporting_period_body" style="padding-top:10px">
                 <div class="mb-4">
                     <div class="pt-3" style="display:inline-block; width: 90%">
-                        <div class="mb-4"><h2>Reporting period</h2></div>
-                        <span>The program reporting period is used in the setup of periodic targets and in Indicator Performance Tracking Tables (IPTT). TolaActivity initially sets the reporting period to include the program’s official start and end dates, as recorded in the Grant and Award Information Tracker (GAIT) system. The reporting period may be adjusted to align with the program’s indicator plan.</span>
+                        <div class="mb-4"><h2>{% trans "Reporting period" %}</h2></div>
+                        <span>{% trans "The program reporting period is used in the setup of periodic targets and in Indicator Performance Tracking Tables (IPTT). TolaActivity initially sets the reporting period to include the program’s official start and end dates, as recorded in the Grant and Award Information Tracker (GAIT) system. The reporting period may be adjusted to align with the program’s indicator plan." %}</span>
                     </div>
                     <button
                         type="button"
@@ -20,19 +20,19 @@
                 </div>
                 <div id="div-gait-dates" class="mb-3">
                     <div id="div_gait_dates_title" class="mb-3">
-                        <h3>GAIT program dates</h3>
+                        <h3>{% trans "GAIT program dates" %}</h3>
                     </div>
                     <div id="div_gait_dates">
                         <div id="div_id_gait_start_date" class="mr-4" style="display: inline-block;">
                             <h4>
-                                <div class="mb-0">START DATE</div>
+                                <div class="mb-0">{% trans "START DATE" %}</div>
                                 <div id="id_gait_start_date"></div>
                             </h4>
                         </div>
 
                         <div id="div_id_gait_start_date" style="display: inline-block;">
                             <h4>
-                                <div class="mb-0">END DATE</div>
+                                <div class="mb-0">{% trans "END DATE" %}</div>
                                 <div id="id_gait_end_date"></div>
                             </h4>
                         </div>
@@ -41,12 +41,12 @@
                 <div class="card inputs-in-a-box" id="div-card-user-dates" style="width: 90%">
                     <div class="card-body p-4">
                         <div id="div_reporting_dates_title">
-                            <h3>Reporting start and end dates</h3>
+                            <h3>{% trans "Reporting start and end dates" %}</h3>
                         </div>
                         <div id="div_reporting_dates">
                             <div id="div_id_reporting_start_date" style="display: inline-block;" class="mr-5">
                                 <h4>
-                                    <div class="mb-0">START MONTH</div>
+                                    <div class="mb-0">{% trans "START MONTH" %}</div>
                                     <input type="text"
                                            name="reporting_period_start"
                                            class="form-control monthPicker"
@@ -56,7 +56,7 @@
                             </div>
                             <div id="div_reporting_end_date" style="display: inline-block;">
                                 <h4>
-                                    <div class="mb-0">END MONTH</div>
+                                    <div class="mb-0">{% trans "END MONTH" %}</div>
                                     <input type="text"
                                            name="reporting_period_end"
                                            class="form-control monthPicker"
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div id="div_reporting_dates_description">
-                            While a program may begin and end any day of the month, reporting periods must begin on the first day of the month and end on the last day of the month. Please note that the reporting start month can only be adjusted <span class="color-red">before targets are set up and a program begins submitting performance results.</span> The reporting end month can still be extended.
+                            {% trans "While a program may begin and end any day of the month, reporting periods must begin on the first day of the month and end on the last day of the month. Please note that the reporting start month can only be adjusted" %} <span class="color-red">{% trans "before targets are set up and a program begins submitting performance results." %}</span> {% trans "The reporting end month can still be extended." %}
                         </div>
                     </div>
                 </div>
