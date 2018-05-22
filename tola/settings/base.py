@@ -86,7 +86,7 @@ USE_L10N = True
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-DATE_FORMAT = "N j, Y"
+DATE_FORMAT = "Y-n-d"
 
 # Add list of languages available for selection.
 LANGUAGES = [

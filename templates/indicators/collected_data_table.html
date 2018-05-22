@@ -36,9 +36,9 @@
                         <td {% if dataCount %} rowspan="{{ dataCount }}" {% endif %} min-width="190">
                             <strong>{{ item.period }}</strong><br>
                             <small>
-                                {{ item.start_date_formatted|default_if_none:"" }}
+                                {{ item.start_date|date:"SHORT_DATE_FORMAT"|default_if_none:"" }}
                                 {% if item.start_date %} - {% endif %}
-                                {{ item.end_date_formatted|default_if_none:"" }}
+                                {{ item.end_date|date:"SHORT_DATE_FORMAT"|default_if_none:"" }}
                             </small>
                         </td>
                         <td {% if dataCount %} rowspan="{{ dataCount }}" {% endif %} align="right">

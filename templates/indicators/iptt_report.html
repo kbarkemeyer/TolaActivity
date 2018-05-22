@@ -20,11 +20,11 @@
   <main class="iptt_table_wrapper">
     <div id="id_div_top_iptt_report">
         <span id="id_span_iptt_date_range">
-          <h2>Indicator Performance Tracking Table</h2>
-          <strong>{{ start_date }} - {{ end_date }}</strong>
+          <h2>{% trans "Indicator Performance Tracking Table" %}</h2>
+          <strong>{{ start_date|date:"SHORT_DATE_FORMAT" }} - {{ end_date|date:"SHORT_DATE_FORMAT" }}</strong>
         </span>
-        <table id="iptt_table" class="table table-sm table-bordered table-hover">
-          <caption>Indicator Performance Tracking Table</caption>
+        <table id="iptt_table" class="table table-sm table-bordered table-hover" style="background-color: white;">
+          <caption>{% trans "Indicator Performance Tracking Table" %}</caption>
           <colgroup scope="col" span="9"></colgroup>
           <colgroup scope="col" span="3" class="lopCols"></colgroup>
           <colgroup scope="col" span="{{ report_date_ranges|length }}"></colgroup>
@@ -44,7 +44,7 @@
                     class="text-center lopCols text-nowrap">
                   {{ k|upper }}<br>
                   {% if v.0 is not None and v.1 is not None %}
-                    <small>{{ v.0|date:"M d, Y" }} - {{ v.1|date:"M d, Y" }}</small>
+                    <small>{{ v.0|date:"SHORT_DATE_FORMAT" }} - {{ v.1|date:"SHORT_DATE_FORMAT" }}</small>
                   {% endif %}
                 </td>
               {% endfor %}
