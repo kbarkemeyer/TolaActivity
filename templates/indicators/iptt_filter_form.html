@@ -153,6 +153,8 @@
 </nav>
 
 <script>
+  var userLang = "{{ LANGUAGE_CODE }}";
+
   $(document).ready(function () {
     console.log(`{{ report_start_date }}`, `{{ report_end_date }}`);
     const site_profile = $("#id_site");
@@ -164,8 +166,6 @@
 
     const start_date_id = `{{ form.start_date.auto_id }}`;
     const end_date_id = `{{ form.end_date.auto_id }}`;
-    $(`#${start_date_id}`).val(formatDate($(`#${start_date_id}`).val()));
-    $(`#${end_date_id}`).val(formatDate($(`#${end_date_id}`).val()));
 
     $(`#${start_date_id}, #${end_date_id}`).datepicker({
       changeMonth: true,
