@@ -262,7 +262,7 @@ class IPTTReportFilterForm(ReportFormCommon):
     site = forms.ModelMultipleChoiceField(queryset=SiteProfile.objects.none(), required=False, label=_('SITE'))
     indicators = forms.ModelMultipleChoiceField(
         queryset=Indicator.objects.none(), required=False, label=_('SELECT INDICATORS'))
-    start_date = forms.DateField(label=_('START'))
+    start_date = forms.DateField(label =_('START'))
     end_date = forms.DateField(label=_('END'))
 
     def __init__(self, *args, **kwargs):

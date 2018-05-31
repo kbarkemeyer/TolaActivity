@@ -759,6 +759,7 @@ class IPTT_ReportView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         filterdata = request.POST.copy()
+        print filterdata
         # no need to include this token in querystring
         del(filterdata['csrfmiddlewaretoken'])
         url_kwargs = {

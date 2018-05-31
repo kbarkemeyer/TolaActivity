@@ -61,10 +61,15 @@
           </label>
           <div class="input-group input-group-sm">
             <input type="text"
-                   name="{{ form.start_date.name }}"
+                   name=""
                    class="form-control"
                    value="{{ form.start_date.value }}"
                    id="{{ form.start_date.auto_id }}">
+            <input type="hidden"
+                   name="{{ form.start_date.name }}"
+                   class="form-control"
+                   value="{{ form.start_date.value }}"
+                   id="start_date">
             <div class="input-group-append">
               <span class="input-group-text" id="id_span_start_date_calendar">
                 <i class="fas fa-calendar-alt"></i>
@@ -79,10 +84,15 @@
           </label>
           <div class="input-group input-group-sm">
             <input type="text"
+                 name=""
+                 class="form-control"
+                 value="{{form.end_date.value }}"
+                 id="{{ form.end_date.auto_id }}">
+            <input type="hidden"
                  name="{{ form.end_date.name }}"
                  class="form-control"
-                 value="{{ form.end_date.value }}"
-                 id="{{ form.end_date.auto_id }}">
+                 value="{{form.end_date.value }}"
+                 id="end_date">
             <div class="input-group-append">
               <span class="input-group-text" id="id_span_end_date_calendar">
                 <i class="fas fa-calendar-alt"></i>
@@ -153,7 +163,6 @@
 </nav>
 
 <script>
-  var userLang = "{{ LANGUAGE_CODE }}";
 
   $(document).ready(function () {
     console.log(`{{ report_start_date }}`, `{{ report_end_date }}`);
@@ -167,6 +176,7 @@
     const start_date_id = `{{ form.start_date.auto_id }}`;
     const end_date_id = `{{ form.end_date.auto_id }}`;
 
+### Changes Mahmood ###
     $(`#${start_date_id}, #${end_date_id}`).datepicker({
       changeMonth: true,
       changeYear: true,
@@ -217,6 +227,99 @@
         }
       },
     });
+###
+### my stuff ###
+    // $(`#${start_date_id}`).val(formatDate($(`#${start_date_id}`).val()));
+    // $(`#${end_date_id}`).val(formatDate($(`#${end_date_id}`).val()));
+
+    // $(`#${start_date_id}, #${end_date_id}`).datepicker({
+    //   changeMonth: true,
+    //   changeYear: true,
+    //   showButtonPanel: true,
+    //   dateFormat: 'M d, yy',
+    //   altFormat: 'yy-mm-dd',
+    //   onClose: function (dateText, inst) {
+    //     const month = inst.selectedMonth;
+    //     const year = inst.selectedYear;
+    //     const existingDate = $(this).next('input').val();
+    //     const newDate = (new Date(year, month, 1)).toISOString().split('T')[0];
+    //     if (existingDate != newDate) {
+    //       $(this).change();
+    //     }
+    //     $(this).datepicker('setDate', new Date(year, month, 1));
+    //   },
+    //   beforeShow: function (input, inst) {
+    //     if ((datestr = $(this).next().val()).length > 0) {
+    //       console.log(datestr);
+    //       const date = new Date(datestr);
+    //       console.log(date);
+    //       year = date.getFullYear();
+    //       month = date.getMonth();
+    //       $(this).datepicker('option', 'defaultDate', new Date(year, month, 1));
+    //       $(this).datepicker('setDate', new Date(year, month, 1));
+    //     }
+    //     var other = this.id == start_date_id ? `#${end_date_id}` : `#${start_date_id}`;
+    //     var option = this.id == start_date_id ? "maxDate" : "minDate";
+    //     $(`#${start_date_id}`).datepicker("option", "minDate", new Date(`{{report_start_date}}`));
+    //     $(`#${start_date_id}`).datepicker("option", "altField", "#start_date");
+    //     $(`#${end_date_id}`).datepicker("option", "maxDate", new Date(`{{report_end_date}}`));
+    //     $(`#${end_date_id}`).datepicker("option", "altField", "#end_date");
+    //     if ((selectedDate = $(other).next().val()).length > 0) {
+    //       var sDate = new Date(selectedDate);
+    //       year = sDate.getFullYear();
+    //       month = sDate.getMonth();
+    //       // year = selectedDate.substring(selectedDate.length - 4, selectedDate.length);
+    //       // month = jQuery.inArray(selectedDate.substring(0, 3), $(this).datepicker('option', 'monthNamesShort'));
+    //       $(this).datepicker("option", option, new Date(year, month, 1));
+    //     }
+    //   },
+    // }); 
+
+    // $('#start_date').datepicker(
+    //   $.extend({
+    //       altField: $(`#${start_date_id}`)
+    //     }, opts)
+    // );
+
+    // $('#end_date').datepicker(
+    //   $.extend({
+    //       altField: $(`#${start_date_id}`)
+    //     }, opts)
+    // );
+
+
+    // } else {
+    //   $(`#${start_date_id}, #${end_date_id}`).datepicker({
+    //     changeMonth: true,
+    //     changeYear: true,
+    //     showButtonPanel: true,
+    //     dateFormat: 'yy-mm-dd',
+    //     onClose: function (dateText, inst) {
+    //       const month = inst.selectedMonth;
+    //       const year = inst.selectedYear;
+    //       const existingDate = $(this).val();
+    //       const newDate = formatISODate(new Date(year, month, 1))
+    //       if (existingDate != newDate) {
+    //         $(this).change();
+    //       }
+    //       $(this).datepicker('setDate', new Date(year, month, 1));
+
+    //     },
+    //     beforeShow: function (input, inst) {
+    //       if ((datestr = $(this).val()).length > 0) {
+    //         $(this).datepicker('option', 'defaultDate', datestr);
+    //         $(this).datepicker('setDate', datestr);
+    //       }
+    //       var other = this.id == start_date_id ? `#${end_date_id}` : `#${start_date_id}`;
+    //       var option = this.id == start_date_id ? "maxDate" : "minDate";
+    //       $(`#${start_date_id}`).datepicker("option", "minDate", new Date(`{{report_start_date}}`));
+    //       $(`#${end_date_id}`).datepicker("option", "maxDate", new Date(`{{report_end_date}}`));
+    //       if ((selectedDate = $(other).val()).length > 0) {
+    //         $(this).datepicker("option", option, selectedDate);
+    //       }
+    //     },
+    //   }); 
+    // }
 
     $("#id_level").select2({"placeholder": "{% trans 'All levels' %}"});
     $("#id_ind_type").select2({"placeholder": "{% trans 'All types' %}"});
@@ -284,5 +387,6 @@
       $("input[type=radio][name='timeframe']").prop("checked", false);
       numRecentPeriods.val(null);
     });
+
   });
 </script>
