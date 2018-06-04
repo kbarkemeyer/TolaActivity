@@ -695,6 +695,11 @@ class IPTT_ReportView(TemplateView):
         except TypeError:
             # there is no start date specified so use the program start date
             start_date = report_start_date
+        # Added this because using ISO dateformat for localization
+        except ValueError:
+            start_date = datetime.strptime(
+                self.filter_form_initial_data.get('start_date'), "%Y-%m-%d").date()
+            start_date = start_date.replace(month=report_start_date.month, day=1)
 
         try:
             end_date = datetime.strptime(
@@ -703,6 +708,11 @@ class IPTT_ReportView(TemplateView):
         except TypeError:
             # end_date is not specified in the filter form
             end_date = report_end_date
+        # Added this because using ISO dateformat for localization
+        except ValueError:
+            end_date = datetime.strptime(
+                self.filter_form_initial_data.get('end_date'), "%Y-%m-%d").date()
+            end_date = end_date.replace(month=report_end_date.month)
 
         if reporttype == self.REPORT_TYPE_TIMEPERIODS:
             # Update the report_end_date to make sure it ends with the last period's end_date
@@ -727,8 +737,8 @@ class IPTT_ReportView(TemplateView):
         indicators = indicators.annotate(**self.annotations).order_by('lastlevelcustomsort', 'number', 'name')
         indicators = self.prepare_indicators(reporttype, period, periods_date_ranges, indicators)
 
-        context['start_date'] = start_date.strftime("%b %d, %Y")
-        context['end_date'] = end_date.strftime("%b %d, %Y")  # self.filter_form_initial_data.get('end_date', report_end_date.strftime('%b %d, %Y'))
+        context['start_date'] = start_date
+        context['end_date'] = end_date  # self.filter_form_initial_data.get('end_date', report_end_date.strftime('%b %d, %Y'))
         context['report_start_date'] = report_start_date
         context['report_end_date'] = report_end_date
         context['report_date_ranges'] = periods_date_ranges
