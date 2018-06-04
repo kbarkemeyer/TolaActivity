@@ -1,8 +1,5 @@
 {% load i18n %}
-<<<<<<< HEAD
-=======
-{% include indicator_form_common_js.html %}
->>>>>>> localize date formats
+{% get_current_language as LANGUAGE_CODE %}
 
 <div id="id_reporting_period_modal" class="modal fade" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -61,18 +58,28 @@
                                     <h4>
                                         <div class="mb-0 text-uppercase">{% trans 'Start date' %}</div>
                                         <input type="text"
-                                               name="reporting_period_start"
+                                               name=""
                                                class="form-control rptMonthPicker"
                                                id="id_reporting_start_date">
+                                        <input type="hidden"
+                                               name="reporting_period_start"
+                                               class="form-control"
+                                               id="alt_start_date"
+                                               value="">
                                     </h4>
                                 </div>
                                 <div id="div_reporting_end_date" style="display: inline-block;">
                                     <h4>
                                         <div class="mb-0 text-uppercase">{% trans 'End date' %}</div>
                                         <input type="text"
-                                           name="reporting_period_end"
+                                           name=""
                                            class="form-control rptMonthPicker"
                                            id="id_reporting_end_date">
+                                        <input type="hidden"
+                                               name="reporting_period_end"
+                                               class="form-control"
+                                               id="alt_end_date"
+                                               value="">
                                     </h4>
                                 </div>
                             </div>
@@ -95,6 +102,14 @@
 </div>
 
 <script type="text/javascript">
+    var userLang = "{{ LANGUAGE_CODE }}";
+
+    if (userLang == 'en') {
+        var dateformat = 'M d, yy';
+    }
+    else {
+        var dateformat = 'd M yy'
+    }
 
     function setupMonthPickers() {
         const start_date_id = "id_reporting_start_date";
@@ -103,44 +118,43 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: 'M d, yy',
+            dateFormat: dateformat,
+            altFormat: 'yy-mm-dd',
+            altField: $(this).next(),
             onClose: function (dateText, inst) {
-                const month = inst.selectedMonth;
-                const year = inst.selectedYear;
-                const existingDate = $(this).val();
-                var newDate = ""
-                if (this.id == start_date_id)
-                    newDate = formatDate(new Date(year, month, 1));
-                else {
-                    newDate = formatDate(new Date(year, month+1, 0));
-                }
+              const month = inst.selectedMonth;
+              const year = inst.selectedYear;
+              var existingDate = this.id == start_date_id ? $('#alt_start_date').val() : $('#alt_end_date').val();
+              const newDate = (new Date(year, month, 1)).toISOString().split('T')[0];
                 if (existingDate != newDate) {
-                    $(this).change();
+                  $(this).change();
                 }
-                $(this).datepicker('setDate', newDate);
-
-            },
+                if (this.id == start_date_id) {
+                  $(this).datepicker('setDate', new Date(year, month, 1));
+                } else {
+                  $(this).datepicker('setDate', new Date(year, month + 1, 0));
+                }
+              },
             beforeShow: function (input, inst) {
                 $("#ui-datepicker-div").addClass("month-only");
-                if ((datestr = $(this).val()).length > 0) {
-                    year = datestr.substring(datestr.length - 4, datestr.length);
-                    month = jQuery.inArray(datestr.substring(0, 3), $(this).datepicker('option', 'monthNamesShort'));
-                    var defaultDate = "";
-                    if (this.id == start_date_id) {
-                        defaultDate = new Date(year, month, 1);
-                    }
-                    else {
-                        defaultDate = new Date(year, month+1, 0);
-                    }
-                    $(this).datepicker('option', 'defaultDate', defaultDate);
-                    $(this).datepicker('setDate', defaultDate);
+                var datestr = this.id == start_date_id ? $('#alt_start_date').val() : $('#alt_end_date').val();
+                if (datestr.length > 0) {
+                  var dateArray = datestr.split("-");
+                  year = dateArray[0];
+                  month = parseInt(dateArray[1], 10) -1;
+                  $(this).datepicker('option', 'defaultDate', new Date(year, month, 1));
+                  $(this).datepicker('setDate', new Date(year, month, 1));
                 }
                 var other = this.id == start_date_id ? `#${end_date_id}` : `#${start_date_id}`;
+                console.log("other:", other);
                 var option = this.id == start_date_id ? "maxDate" : "minDate";
-                if ((selectedDate = $(other).val()).length > 0) {
-                    year = selectedDate.substring(selectedDate.length - 4, selectedDate.length);
-                    month = jQuery.inArray(selectedDate.substring(0, 3), $(this).datepicker('option', 'monthNamesShort'));
-                    if (this.id == start_date_id){
+                var selectedDate = other == `#${start_date_id}` ? $('#alt_start_date').val() : $('#alt_end_date').val();
+                console.log("sd:", selectedDate);
+                if (selectedDate.length > 0) {
+                  var sdateArray = selectedDate.split("-");
+                  year = sdateArray[0];
+                  month = parseInt(sdateArray[1], 10), - 1;
+                  if (this.id == start_date_id){
                         $(this).datepicker("option", option, new Date(year, month, 1));
                     }
                     else {
@@ -160,10 +174,12 @@
         base_url = base_url.slice(0,-1)
         $("input[name=program_id]").val($(event.relatedTarget).data('program'));
         $("#reportingperiod_update_form").attr("action", base_url + $(event.relatedTarget).data('program'));
-        $("#id_gait_start_date").html($.datepicker.formatDate('M d, yy', new Date($(event.relatedTarget).data('progstart'))));
-        $("#id_gait_end_date").html($.datepicker.formatDate('M d, yy', new Date($(event.relatedTarget).data('progend'))));
-        $("#id_reporting_start_date").val($.datepicker.formatDate('M d, yy', new Date($(event.relatedTarget).data('rptstart'))));
-        $("#id_reporting_end_date").val($.datepicker.formatDate('M d, yy', new Date($(event.relatedTarget).data('rptend'))));
+        $("#id_gait_start_date").html($.datepicker.formatDate(dateformat, new Date($(event.relatedTarget).data('progstart'))));
+        $("#id_gait_end_date").html($.datepicker.formatDate(dateformat, new Date($(event.relatedTarget).data('progend'))));
+        $("#id_reporting_start_date").val($.datepicker.formatDate(dateformat, new Date($(event.relatedTarget).data('rptstart'))));
+        $("#id_reporting_end_date").val($.datepicker.formatDate(dateformat, new Date($(event.relatedTarget).data('rptend'))));
+        $("#alt_start_date").val($.datepicker.formatDate('yy-mm-dd', new Date($(event.relatedTarget).data('rptstart'))));
+        $("#alt_end_date").val($.datepicker.formatDate('yy-mm-dd', new Date($(event.relatedTarget).data('rptend'))));
 
         setupMonthPickers();
     });
